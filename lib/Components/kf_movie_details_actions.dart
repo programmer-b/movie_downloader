@@ -29,43 +29,47 @@ class KFMovieDetailActions extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               child: Column(
                 children: [
-                  SizedBox(
-                    width: width,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        showInterstitialAd();
-                        await showDialog(
-                            context: context,
-                            builder: (context) => KFVideoLoadingComponent(
-                                  homeUrl: homeUrl,
-                                  isMovie: true,
-                                  currentSeason:
-                                      "${value.kfTMDBSearchTVResultsById?.numberOfSeasons}",
-                                )).then((value) => createInterstitialAd());
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(1))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            MdiIcons.play,
-                            color: Colors.black,
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: width,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            showInterstitialAd();
+                            await showDialog(
+                                context: context,
+                                builder: (context) => KFVideoLoadingComponent(
+                                      homeUrl: homeUrl,
+                                      isMovie: true,
+                                      currentSeason:
+                                          "${value.kfTMDBSearchTVResultsById?.numberOfSeasons}",
+                                    )).then((value) => createInterstitialAd());
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(1))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                MdiIcons.play,
+                                color: Colors.black,
+                              ),
+                              8.width,
+                              Text(
+                                "Watch Now ${isMovie ? "" : "S${value.kfTMDBSearchTVResultsById?.numberOfSeasons} E1"}",
+                                style: boldTextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          8.width,
-                          Text(
-                            "Watch Now ${isMovie ? "" : "S${value.kfTMDBSearchTVResultsById?.numberOfSeasons} E1"}",
-                            style: boldTextStyle(color: Colors.black),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  8.height,
+                      8.height,
+                    ],
+                  ).visible(false),
                   SizedBox(
                     width: width,
                     height: 50,

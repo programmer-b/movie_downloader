@@ -86,24 +86,21 @@ class _KFSplashScreenState extends State<KFSplashScreen> {
       );
 
   Widget _loadingWidget() => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DefaultTextStyle(
-                  style: boldTextStyle(
-                      size: 44,
-                      color: Color.fromARGB(255, 231, 26, 11),
-                      fontFamily: 'assets/fonts/BungeeInline-Regular.ttf'),
-                  child: AnimatedTextKit(
-                      isRepeatingAnimation: false,
-                      animatedTexts: [
-                        TypewriterAnimatedText(kfAppName.toUpperCase(),
-                            speed: 200.milliseconds)
-                      ])).fit(),
-            ],
-          ).center().paddingSymmetric(vertical: 30),
-        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DefaultTextStyle(
+                style: boldTextStyle(
+                    size: 44,
+                    color: Color.fromARGB(255, 231, 26, 11),
+                    fontFamily: 'assets/fonts/BungeeInline-Regular.ttf'),
+                child: AnimatedTextKit(
+                    isRepeatingAnimation: false,
+                    animatedTexts: [
+                      TypewriterAnimatedText(kfAppName.toUpperCase(),
+                          speed: 200.milliseconds)
+                    ])).fit(),
+          ],
+        ).center().paddingSymmetric(vertical: 30, horizontal: 8),
       );
 }

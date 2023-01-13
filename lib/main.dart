@@ -16,6 +16,7 @@ import 'package:movie_downloader/Screens/Auth/login/provider.dart';
 import 'package:movie_downloader/Screens/Auth/password/provider.dart';
 import 'package:movie_downloader/Screens/Auth/register/provider.dart';
 import 'package:movie_downloader/Screens/kf_splash_screen.dart';
+import 'package:movie_downloader/Utils/ad_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ import 'Commons/kf_keys.dart';
 import 'Provider/flutter_downloader_provider.dart';
 import 'firebase_options.dart';
 
+//ca-app-pub-5988017258715205/7447999199
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialize();
@@ -47,7 +49,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  loadAppOpenAd();
   runApp(const MyApp());
 }
 
@@ -97,4 +99,19 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+AppOpenAd? myAppOpenAd;
+
+loadAppOpenAd() {
+  AppOpenAd.load(
+      adUnitId: AdHelper.appOpenAdUnitId, //Your ad Id from admob
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+          onAdLoaded: (ad) {
+            myAppOpenAd = ad;
+            myAppOpenAd!.show();
+          },
+          onAdFailedToLoad: (error) {}),
+      orientation: AppOpenAd.orientationPortrait);
 }

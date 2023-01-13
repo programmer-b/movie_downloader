@@ -52,15 +52,6 @@ class _KFVideoLoadingComponentState extends State<KFVideoLoadingComponent> {
     final startPage = (await fetchDataFromInternet(homeUrl)).body;
 
     final startDoc = startPage.document;
-    // int numberOfSeasons = 2;
-    // if (mounted) {
-    //   numberOfSeasons = context
-    //           .read<KFProvider>()
-    //           .kfTMDBSearchTVResultsById
-    //           ?.numberOfSeasons ??
-    //       2;
-    // }
-
     String seasonsUrl = "";
     var element = startDoc.getElementById('sesh');
 
@@ -120,10 +111,11 @@ class _KFVideoLoadingComponentState extends State<KFVideoLoadingComponent> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool get webAccessed => getBoolAsync(keyWebAccessed);
-  bool get webAccessedOnce => getBoolAsync(keyWebAccessedOnce);
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 35), () => _delayedLoading = true);
+
     log("WEB ACCESSED: $webAccessed");
 
     final provider = Provider.of<KFProvider>(context);
@@ -146,97 +138,14 @@ class _KFVideoLoadingComponentState extends State<KFVideoLoadingComponent> {
           provider.kfTMDBSearchMovieResultsById?.originalTitle ??
           "";
     }
-    if (!webAccessed) {
-      return _configureWeb(title, rootImagePath);
-    }
-    if (!webAccessedOnce) {
-      return _configureWeb(title, rootImagePath);
-    }
+
     return Scaffold(
       key: _scaffoldKey,
       body: _buildBody(title, rootImagePath),
     );
   }
 
-  void setWebAccessed() async => webAccessedOnce
-      ? await setValue(keyWebAccessed, true)
-      : await setValue(keyWebAccessedOnce, true);
-
-  Widget _configureWeb(String title, String rootImagePath) => FutureBuilder(
-      future: 20.seconds.delay,
-      builder: (_, snap) {
-        if (snap.ready) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            setWebAccessed();
-            finish(context);
-            KFVideoLoadingComponent(
-              homeUrl: homeUrl,
-              isMovie: isMovie,
-              isDownloading: isDownloading,
-              currentSeason: currentSeason,
-              episodeIndex: episodeIndex,
-              numberOfSeasons: numberOfSeasons,
-            ).launch(context);
-          });
-        }
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.clear,
-                color: white,
-              ),
-              onPressed: () => finish(context),
-            ),
-          ),
-          body: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SpinKitDualRing(
-                              color: white,
-                            ),
-                            20.width,
-                            Countup(
-                              begin: webAccessedOnce ? 50 : 0,
-                              end: 100,
-                              duration: 40.seconds,
-                              style: primaryTextStyle(color: white, size: 21),
-                              suffix: '%',
-                              curve: Curves.easeIn,
-                            )
-                          ]),
-                      22.height,
-                      Text(
-                        'Just a moment',
-                        style: boldTextStyle(color: white),
-                      ),
-                      12.height,
-                      Text(
-                        'Please wait while we configure your movie browser.',
-                        style: primaryTextStyle(color: white),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              _web(
-                  rootImagePath: rootImagePath,
-                  title: title,
-                  webAccessed: false)
-            ],
-          ),
-        );
-      });
+  void setWebAccessed() async => await setValue(keyWebAccessed, true);
 
   Widget _buildBody(String title, String rootImagePath) =>
       Builder(builder: (context) {
@@ -266,31 +175,16 @@ class _KFVideoLoadingComponentState extends State<KFVideoLoadingComponent> {
                       ),
                     ),
                     10.height,
-                    CircularPercentIndicator(
-                      animateFromLastPercent: true,
-                      radius: 80,
-                      animationDuration: 35000,
-                      onAnimationEnd: () =>
-                          setState(() => _delayedLoading = true),
-                      animation: true,
-                      percent: 0.97,
-                      center: Countup(
-                        precision: 0,
-                        curve: Curves.fastOutSlowIn,
-                        begin: 0,
-                        end: 97,
-                        duration: 35000.milliseconds,
-                        style: boldTextStyle(size: 16, color: Colors.white),
-                        suffix: '%',
-                      ),
-                      progressColor: kfPrimaryTextColor,
-                    ),
+                    SpinKitFadingCircle(color: white),
+                    8.height,
+                    Text('A minute ...'),
+                    10.height,
                     if (_delayedLoading)
                       Column(
                         children: [
                           10.height,
                           Text(
-                            "Loading this video is taking longer than expected. Please try to connect to fast internet connection or re install the app and try again",
+                            "Loading this video is taking longer than expected. Please try to connect to fast internet connection or re-install the app and try again",
                             style: boldTextStyle(color: kfPrimaryTextColor),
                             textAlign: TextAlign.center,
                           ),
@@ -339,10 +233,8 @@ class _KFVideoLoadingComponentState extends State<KFVideoLoadingComponent> {
   Widget _web(
           {String? url,
           required String rootImagePath,
-          required String title,
-          bool? webAccessed}) =>
+          required String title}) =>
       Offstage(
-        // offstage: false,
         offstage: true,
         child: WebComponent(
             url: url ??
@@ -352,7 +244,7 @@ class _KFVideoLoadingComponentState extends State<KFVideoLoadingComponent> {
             rootImageUrl: rootImagePath,
             title: title,
             isDownloading: isDownloading,
-            supportMultipleWindows: webAccessed ?? true,
+            // supportMultipleWindows: webAccessed ?? true,
             type: isMovie ? 'movie' : 'tv'),
       );
 }

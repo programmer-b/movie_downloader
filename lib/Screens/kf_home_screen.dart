@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:movie_downloader/Commons/kf_colors.dart';
 import 'package:movie_downloader/Fragments/kf_downloads_fragment.dart';
 import 'package:movie_downloader/Fragments/kf_home_fragment.dart';
@@ -57,6 +58,7 @@ class _KFHomeScreenState extends State<KFHomeScreen> {
     });
     FlutterDownloader.registerCallback(MyApp.downloadCallback);
   }
+
 
   @override
   Widget build(BuildContext context) {

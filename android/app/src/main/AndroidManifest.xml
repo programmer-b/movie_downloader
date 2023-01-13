@@ -33,5 +33,7 @@
 	    <meta-data
 	    android:name="com.google.android.gms.ads.APPLICATION_ID"
 	    android:value="ca-app-pub-5988017258715205~3451685537"/>
+            <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="2354567484718989"/>
+            <meta-data android:name="com.facebook.sdk.ClientToken" android:value="de84d75c7b938b98f0ee9d316d282358"/>
     </application>
 </manifest>
